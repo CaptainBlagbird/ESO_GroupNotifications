@@ -20,7 +20,7 @@ end
 
 
 -- Event handler function for EVENT_GROUP_MEMBER_LEFT and EVENT_GROUP_MEMBER_JOINED
-local function OnGroupMemberJoinedOrLeft(eventCode, memberName, reason, isLocalPlayer, isLeader)
+local function OnGroupMemberJoinedOrLeft(eventCode, memberName, reason, isLocalPlayer, isLeader, memberDisplayName)
 	if not IsUnitGrouped("player") then return end
 	memberName = ZO_LinkHandler_CreateCharacterLink(memberName)--zo_strformat(SI_UNIT_NAME, memberName)
 	local msg = ""
@@ -36,11 +36,15 @@ local function OnGroupMemberJoinedOrLeft(eventCode, memberName, reason, isLocalP
 		if isLocalPlayer then
 			msg = zo_strformat(SI_GROUP_NOTIFICATION_GROUP_SELF_KICKED)
 		else
+			-- msg = zo_strformat(SI_GROUPLEAVEREASON1, memberName, memberDisplayName)
 			msg = zo_strformat(SI_GROUPLEAVEREASON1, memberName)
+			msg = msg:gsub("%(%)", "")
 		end
 	-- Left
 	elseif reason == GROUP_LEAVE_REASON_VOLUNTARY and not isLocalPlayer then
+		-- msg = zo_strformat(SI_GROUPLEAVEREASON0, memberName, memberDisplayName)
 		msg = zo_strformat(SI_GROUPLEAVEREASON0, memberName)
+		msg = msg:gsub("%(%)", "")
 	-- Destroyed
 	else -- GROUP_LEAVE_REASON_DESTROYED
 		-- Reason for every other group member after leaving or being kicked from a group
@@ -55,6 +59,7 @@ EVENT_MANAGER:RegisterForEvent(AddonName, EVENT_GROUP_MEMBER_JOINED, OnGroupMemb
 
 -- Event handler function for EVENT_LEADER_UPDATE
 local function OnLeaderUpdate(eventCode, leaderTag)
+	if not IsUnitGrouped("player") then return end
 	d(zo_strformat(SI_GROUP_NOTIFICATION_GROUP_LEADER_CHANGED, ZO_LinkHandler_CreateCharacterLink(GetUnitName(leaderTag))))
 end
 EVENT_MANAGER:RegisterForEvent(AddonName, EVENT_LEADER_UPDATE, OnLeaderUpdate)
