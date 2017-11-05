@@ -1,7 +1,7 @@
 ## Title: Group Notifications |c555555v1.0|r
 ## Version: 1.0
 ## Author: |c70C0DECaptainBlagbird|r
-## APIVersion: 100020
+## APIVersion: 100021
 ## Description: Displays group notifications in chat
 
 
